@@ -2,12 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\BoEntityCell;
-use App\Entity\BoEntityConfig;
-use App\Entity\BoEquipe;
-use App\Entity\BoEvenementConfig;
-use App\Entity\BoParticipant;
-use App\Entity\BoProject;
 use App\Entity\WsBranche;
 use App\Entity\WsFederation;
 use App\Entity\WsGroupeUnite;
@@ -37,10 +31,8 @@ class AppFixtures extends Fixture
         $faker = Factory::create('fr_BE');
 
         $lesscouts = new WsFederation();
-       // $lesguides = new WsFederation();
 
         $lesscouts->setName("Les Scouts");
-       // $lesguides->setName("Les Guides");
 
         $this->manager->persist($lesscouts);
 
@@ -90,23 +82,25 @@ class AppFixtures extends Fixture
             37 => ['code' => 'VML', 'name' => 'Val mosan-Liège'],
         ];
         $branches = [];
-        for ($i = 1; $i<5; $i++)
+        for ($b = 1; $b<5; $b++)
         {
             $branche = new WsBranche();
-            $branche->setName($branchesCodes[$i]['name']);
-            $branche->setValue($branchesCodes[$i]['code']);
-            $branches[$i] = $branche;
+            $branche->setName($branchesCodes[$b]['name']);
+            $branche->setValue($branchesCodes[$b]['code']);
+            $branches[$b] = $branche;
             $this->manager->persist($branche);
+            $this->manager->flush();
         }
 
-        for ($i = 1; $i<38; $i++)
+        for ($i = 1; $i<10; $i++)
         {
             $groupe = new WsGroupeUnite();
             $groupe->setFederation($lesscouts);
             $groupe->setName($groupes[$i]['name']);
             $groupe->setValue($groupes[$i]['code']);
-
-            for ($i = 1; $i<20; $i++)
+            $this->manager->persist($groupe);
+            $this->manager->flush();
+            for ($a = 1; $a<5; $a++)
             {
                 $unite = new WsUnite();
                 $unite->setGroupe($groupe);
@@ -115,14 +109,18 @@ class AppFixtures extends Fixture
                 $name = $letters . '0' . $numbers;
                 $unite->setValue($name);
                 $unite->setName($faker->city());
-                for ($i = 1; $i<5; $i++)
+                $this->manager->persist($unite);
+                $this->manager->flush();
+                for ($j = 1; $j<5; $j++)
                 {
                     $section = new WsSection();
-                    $section->setBranche($branches[$i]);
-                    $section->setValue($unite->getValue().$branches[$i]->getValue());
-                    $section->setName($unite->getValue()." ".$branches[$i]->getName());
+                    $section->setBranche($branches[$j]);
+                    $section->setValue($unite->getValue().$branches[$j]->getValue());
+                    $section->setName($unite->getValue()." ".$branches[$j]->getName());
                     $section->setUnite($unite);
-                    for ($i = 1; $i<20; $i++)
+                    $this->manager->persist($section);
+                    $this->manager->flush();
+                    for ($k = 1; $k<rand(5,15); $k++)
                     {
                         $membre = new WsMembre();
                         $membre->setSection($section);
@@ -130,12 +128,12 @@ class AppFixtures extends Fixture
                         $membre->setNom($faker->name());
                         $membre->setPrenom($faker->firstName());
                         $this->manager->persist($membre);
+                        $this->manager->flush();
+
                     }
-                    $this->manager->persist($section);
                 }
-                $this->manager->persist($unite);
             }
-            $this->manager->persist($groupe);
         }
+
     }
 }

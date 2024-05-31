@@ -13,9 +13,11 @@
                 </thead>
                 <tbody>
                 {% for membre in membres %}
-                    <td>{{ membre.prenom }}</td>
-                    <td>{{ membre.nom }}</td>
-                    <td>{{ membre.email }}</td>
+                    <tr>
+                        <td>{{ membre.prenom }}</td>
+                        <td>{{ membre.nom }}</td>
+                        <td>{{ membre.email }}</td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>
