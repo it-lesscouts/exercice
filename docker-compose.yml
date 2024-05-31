@@ -7,6 +7,8 @@ services:
         build: .docker/mysql
         ports:
             - "${DOCKER_MYSQL_PORT_3306}:3306"
+        volumes:
+            - database:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_ROOT_PASSWORD}
             MYSQL_DATABASE: ${DOCKER_MYSQL_DATABASE}
@@ -36,4 +38,5 @@ networks:
 
 volumes:
     app:
+    database:
 

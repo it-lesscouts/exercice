@@ -125,11 +125,10 @@ class AppFixtures extends Fixture
                         $membre = new WsMembre();
                         $membre->setSection($section);
                         $membre->setEmail($faker->email());
-                        $membre->setNom($faker->name());
+                        $membre->setNom($faker->lastName());
                         $membre->setPrenom($faker->firstName());
                         $this->manager->persist($membre);
                         $this->manager->flush();
-
                     }
                 }
             }
